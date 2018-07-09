@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0 auto;}
+		ul, li { list-style: none; }
+		.slide { width: 1000px; height: 500px; position: relative;}
+		.slide ul { width: 400%; height: 80%; display: flex; }
+		.slide li { width: 25%; height: 100%; }
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaf; }
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<p class="pos">
+			<!-- 인덱스를 0부터 시작하기 위해서 p로 분리시켜놓음. -->
+			<a href="#">1</a>
+			<a href="#">2</a>
+			<a href="#">3</a>
+			<a href="#">4</a>
+		</p>
+		<a href="#" class="arrow left">PREV</a>
+		<a href="#" class="arrow right">NEXT</a>
+		<a href="#" class="stop">STOP</a>
+		<a href="#" class="play">START</a>
+	</div>
+	<script type="text/javascript">
+		function start() {
+			var target = $('.slide');
+			var obj = target.find('ul');
+			var len = target.find('li').length;
+			var pos = 0;
+			var setTime = 1000;
+			var timer;
+
+			function play() {
+				clearTimeout(timer);
+				if(++pos >= len) pos = 0;
+				else if(pos < 0) pos = len - 1;
+				stopToPlay();
+				timer = setTimeout(play, setTime)
+			}
+
+			function stop() {
+				obj.stop();
+				timer = clearTimeout();
+			}
+			function stopToPlay() {
+				obj.stop().animate({
+					marginLeft:-pos*100+"%"
+				}, 1000)
+			}
+			function arrow() {
+				if($(this).hasClass('left')) pos -= 2;
+				play();
+			}
+			function positionSet() {
+				pos = $(this).index() -1;
+				play();
+			}
+			target
+				.on('click', '.play', play)
+				.on('click', '.stop', stop)
+				.on('click', '.arrow', arrow)
+				.on('click', '.pos a', positionSet) //class pos && tag a
+		}
+		start();
+	</script>
+</body>
+</html>

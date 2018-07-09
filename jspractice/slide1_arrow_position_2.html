@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0 auto; }
+		ul,li { list-style: none; }
+		.slide { width: 1000px; height: 400px; }
+		.slide ul { width: 400%; height: 80%; display: flex; }
+		.slide li { width: 25%; height: 100%; }
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaf; }
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<p class="pos">
+			<a href="#">1</a>
+			<a href="#">2</a>
+			<a href="#">3</a>
+			<a href="#">4</a>
+			<a href="#">5</a>
+		</p>
+		<a href="#" class="arrow left">PREV</a>
+		<a href="#" class="arrow right">NEXT</a>
+		<a href="#" class="stop">STOP</a>
+		<a href="#" class="play">START</a>
+	</div>
+	<script type="text/javascript">
+		function start() {
+			var target = $('.slide');
+			var obj = target.find('ul');
+			var len = target.find('li').length;
+			var pos = 0;
+			var timer;
+			var setTime = 1000;
+
+			function play() {
+				clearTimeout(timer);
+				if(++pos >= len) pos = 0;
+				else if(pos < 0) pos = len - 1;
+				playAnimation();
+				timer = setTimeout(play, setTime);
+			}
+
+			function stop() {
+				obj.stop();
+				clearTimeout(timer);
+			}
+
+			function playAnimation() {
+				obj.stop().animate({
+					marginLeft:-pos*100+"%"
+				}, 1000)
+			}
+
+			function stop2play () {
+				pos -= 1
+				play()
+			}
+
+			function arrow() {
+				if($(this).hasClass('left')) pos -= 2;
+				play();
+			}
+			function positionSet() {
+				pos = $(this).index() - 1;
+				play();
+			}
+
+			target
+				.on('click', '.stop', stop)
+				.on('click', '.play', stop2play)
+				.on('click', '.arrow', arrow)
+				.on('click', '.pos a', positionSet)
+
+			timer = setTimeout(play, setTime)
+		}
+		start();
+	</script>
+</body>
+</html>
