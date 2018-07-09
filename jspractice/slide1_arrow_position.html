@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin:0;padding:0;}
+		ul, li {list-style:none;}
+		.slide {width: 1000px;margin: 0 auto;}
+		.slide ul{width:400%; display: flex;}
+		.slide li{width:25%; height: 400px;}
+		.slide li:nth-child(1){background: #afa;}
+		.slide li:nth-child(2){background: #ffa;}
+		.slide li:nth-child(3){background: #aff;}
+		.slide li:nth-child(4){background: #faa;}
+	</style>
+</head>
+<body>
+<div class="slide">
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<p class="pos">
+		<a href="#">1</a>
+		<a href="#">2</a>
+		<a href="#">3</a>
+		<a href="#">4</a>
+	</p>
+	<a href="#" class="arrow left">이전</a>
+	<a href="#" class="arrow right">다음</a>
+	<a href="#" class="stop">멈춰</a>
+	<a href="#" class="play">시작</a>
+</div>
+<script src="js/jquery-1.12.4.min.js"></script>
+<script>
+	function start () {
+		
+		var target =  $('.slide');
+		var obj = target.find('ul');
+		var len = target.find('li').length;
+		var pos = 0;
+		var setTime = 3000;
+		var timer;
+
+		function play () {
+			clearTimeout(timer);
+
+			if(++pos >= len)
+				pos = 0
+			else if(pos < 0)
+				pos = len - 1
+
+			stopToPlay ()
+
+			timer = setTimeout(play, setTime)
+		}
+
+		function stop () {
+			obj.stop()
+			timer = clearTimeout()
+		}
+
+		function stopToPlay () {
+			obj.stop().animate({
+				marginLeft:-pos*100+"%"
+			}, 1000)
+		}
+
+		function arrow () {
+			if ($(this).hasClass('left')) {
+				pos -= 2
+			}
+			play()
+		}
+
+		function positionSet () {
+			pos = $(this).index() - 1
+			play()
+		}
+
+		target
+			.on('click', '.stop', stop)
+			.on('click', '.play', stopToPlay)
+			.on('click', '.arrow', arrow)
+			.on('click', '.pos a', positionSet)
+
+		timer = setTimeout(play, setTime)
+	}
+	start();
+</script>
+</body>
+</html>
