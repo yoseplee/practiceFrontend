@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0; }
+		ul, li { list-style: none; }
+		a { color: inherit; text-decoration: none; }
+		.wrap { width: 1000px; margin:0 auto;}
+		.slide { width: 100%; height: 400px; position: relative; overflow: hidden; margin-top: 40px; }
+		.slide ul { width: 400%; height: 100%; display: flex; }
+		.slide li { width: 25%; height: 100%;}
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aff; }
+		#control { margin:0 auto;}
+		#control a { display: block; line-height: 80px; padding:0 40px;}
+		.contblk { height: 100px; }
+		.contblk ul { display: flex; justify-content: center;}
+
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<div class="slide">
+			<ul>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+		<div id="control">
+			<div class="contblk">
+				<ul>
+					<li><a href="#" class="arrow left">Prev</a></li>
+					<li><a href="#" class="arrow right">Next</a></li>
+				</ul>
+			</div>
+			<div class="contblk">
+				<ul>
+					<li><a href="#" class="stop">Stop</a></li>
+					<li><a href="#" class="play">Start</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function start() {
+			var target = $('.slide');						//get all elements which class named 'slide'
+			var control = $('#control');					//get all elements which id names 'control'
+			var obj = target.find('ul');					//if there's ul tag, then grab it
+			var len = target.find('li').length;				//if ther 's li tag, grab and count the number of indicies
+			var pos = 0;
+			var setTime = 3000;
+			var timer;
+
+			function play() {
+				clearTimeout(timer);
+				if(++pos >= len) pos = 0;
+				else if(pos < 0) pos = len-1;
+
+				stopToPlay();
+
+				timer = setTimeout(play, setTime);
+			}
+
+			function stop() {
+				obj.stop();							//jquery method... stop the animation
+				timer = clearTimeout();
+			}
+
+			function stopToPlay() {
+				obj.stop().animate({				//jquery method... it returns itself. so, execute stop(), and then animate()
+					marginLeft:-pos*100+"%"
+				}, 1000)
+			}
+			function arrow() {
+				if($(this).hasClass('left')) {
+					pos -= 2
+				}
+				play();
+			}
+
+			control
+				.on('click', '.stop', stop)
+				.on('click', '.play', stopToPlay)
+				.on('click', '.arrow', arrow)
+
+			timer = setTimeout(play, setTime);
+
+		}
+
+		start();
+	</script>
+</body>
+</html>

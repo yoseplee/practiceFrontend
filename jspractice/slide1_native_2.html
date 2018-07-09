@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { margin: 0 auto; padding: 0; }
+		ul, li { list-style: none; }
+		.slide { width: 1000px; height: 400px; position: relative;}
+		.slide ul { width: 400%; height: 100%; display: flex; transition: 1s;}
+		.slide li { width: 25%;}
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaf; }
+	</style>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		var obj = document.getElementsByClassName('slide')[0];
+		var obj_ul = obj.getElementsByTagName('ul')[0];
+		function start() {
+			var setTime = 1000; //ms
+			var timer;
+			var pos = 0;
+			var len = obj_ul.getElementsByTagName('li').length;
+			function play() {
+				clearTimeout(timer);
+				timer = setTimeout(play, setTime);
+				if(++pos >= len) pos = 0;
+				obj_ul.style.marginLeft = -pos*100+"%"
+			}
+			timer = setTimeout(play, setTime);
+		}
+		start();
+	</script>
+</body>
+</html>

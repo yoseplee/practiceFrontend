@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0 auto; }
+		ul, li { list-style: none; }
+		.slide { width: 1000px; }
+		.slide ul { width: 400%; display: flex; }
+		.slide li { width: 25%; height: 400px; }
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaa; }
+	</style>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+<script>
+	var obj = document.getElementsByClassName('slide')[0]; //[0]is index, the number of class named 'slide' from top to end of document.
+	var obj_ul = obj.getElementsByTagName('ul')[0];
+	function start() {
+		var setTime = 1000;
+		var timer;
+		var pos = 0;
+		var len = obj_ul.getElementsByTagName('li').length;
+		function play () {
+			clearTimeout(timer)		//kind of initialization. Or that slide move suddenly, because of timer starting point.
+			timer = setTimeout(play, setTime)	//do function named 'play' after the time, value of 'setTime'
+			if(++pos >= len) pos = 0;			//if end of slide, go to the first place and do slide again.
+			obj_ul.style.marginLeft = -pos*100+"%"	//move slide
+		}
+		timer = setTimeout(play, setTime)	//kind of infinite loop. same as css' animation - infinite
+	}
+	start();
+</script>
+</body>
+</html>

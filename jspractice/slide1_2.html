@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0 auto; }
+		ul, li { list-style: none; }
+		.slide { width: 1000px; height: 400px; position: relative; }
+		.slide ul { width: 400%; height: 100%; display: flex; }
+		.slide li { width: 25%; height: 100%; }
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaf; }
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<a href="#" onclick="stop()">STOP</a>
+		<a href="#" onclick="play()">START</a>
+	</div>
+	<script type="text/javascript">
+		var obj = $('.slide ul');
+		var len = $('li', obj).length;
+		var timer;
+		var pos = 0;
+		function start() {
+			var setTime = 1000;
+			function play() {
+				clearTimeout(timer);
+				timer = setTimeout(play, setTime)
+				if(++pos >= len) pos = 0;
+				obj.animate({
+					marginLeft:-pos*100+"%"
+				}, 1000)
+			}
+			timer = setTimeout(play, setTime)
+		}
+
+		function stop() {
+			clearTimeout(timer);
+			obj.stop();
+		}
+
+		function play() {
+			obj.animate({
+				marginLeft:-pos*100+"%"
+			}, 1000)
+		}
+
+		start()
+	</script>
+</body>
+</html>
