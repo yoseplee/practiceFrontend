@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Total Practice</title>
+	<style type="text/css">
+		* { padding: 0; margin: 0 auto; font-size: 30px; font-weight: bold; font-family: "nanum gothic"}
+		ul, li { list-style: none; }
+		a { color: inherit; text-decoration: none; }
+		.slide { width: 1000px; height: 500px; }
+		.slide ul { width: 400%; height: 80%; display: flex; }
+		.slide li { width: 25%; height: 100%; }
+		.slide li:nth-child(1) { background: #afa; }
+		.slide li:nth-child(2) { background: #aff; }
+		.slide li:nth-child(3) { background: #ffa; }
+		.slide li:nth-child(4) { background: #aaf; }
+	</style>
+	<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+</head>
+<body>
+	<div class="slide">
+		<ul>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<p class="pos">
+			<a href="#">1</a>
+			<a href="#">2</a>
+			<a href="#">3</a>
+			<a href="#">4</a>
+		</p>
+		<a href="#" class="play">START</a>
+		<a href="#" class="stop">STOP</a>
+		<a href="#" class="arrow left">PREV</a>
+		<a href="#" class="arrow right">NEXT</a>
+	</div>
+	<script type="text/javascript">
+
+		function start() {
+			var target = $('.slide');
+			var obj = target.find('ul');
+			var len = target.find('li').length; 	//find the number of indicies
+			var setTime = 1500; 					//timer tick for 1000ms
+			var timer;
+			var pos = 0;
+
+
+			function play() {
+				clearTimeout()
+				if(++pos >= len) pos = 0;
+				else if(pos < 0) pos = len -1;
+				//do slide
+				doAnimation();
+				timer = setTimeout(play, setTime);
+			}
+
+			function stop() {
+				obj.stop();
+				clearTimeout(timer)
+			}
+
+			function doAnimation() {
+				obj.stop().animate({
+					marginLeft: -pos*100+"%"
+				})
+			}
+
+			function stopToPlay() {
+				pos -= 1;
+				play();
+			}
+
+			function arrow() {
+				if($(this).hasClass('left')) {
+					pos -= 2;
+				}
+			}
+			function positionSet() {
+				// alert($(this).index());
+				var index = $(this).index();
+				pos = index - 1;
+			}
+
+			timer = setTimeout(play, setTime);
+
+			//for control
+			target
+				.on('click', '.stop', stop)
+				.on('click', '.play', stopToPlay)
+				.on('click', '.arrow', arrow)
+				.on('click', '.pos a', positionSet)
+		}
+		start();
+	</script>
+</body>
+</html>
